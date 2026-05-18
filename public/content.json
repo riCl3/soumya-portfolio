@@ -1,0 +1,83 @@
+{
+  "hero": {
+    "name": "Soumya Das",
+    "title": "AI Engineer",
+    "tagline": "Building intelligent systems that scale",
+    "bio": "AI Engineer focused on LLM infrastructure, distributed systems, and edge deployment. Currently at SuperAlign.ai, building benchmarking pipelines across 100+ GPUs.",
+    "location": "India",
+    "socials": [
+      { "label": "GitHub", "url": "https://github.com/riCl3" },
+      { "label": "LinkedIn", "url": "https://linkedin.com/in/soumya-das-nit" },
+      { "label": "Email", "url": "mailto:soumyaric2@gmail.com" }
+    ],
+    "resume_files": [
+      { "label": "AI Engineer", "file": "/resume/AI_Engineer.pdf" },
+      { "label": "Backend / SDE / SWE", "file": "/resume/Backend_SDE_SWE.pdf" }
+    ]
+  },
+  "experience": [
+    {
+      "company": "SuperAlign.ai",
+      "role": "AI Engineer Intern",
+      "period": "Nov 2025 - Present",
+      "current": true,
+      "highlights": [
+        "Building distributed LLM benchmarking systems across 100+ GPUs",
+        "Managing bare-metal resources with Proxmox and Coolify",
+        "Optimizing inference pipelines using vLLM and ONNX runtime"
+      ]
+    },
+    {
+      "company": "ByteBeam",
+      "role": "Founder",
+      "period": "Jul 2025 - Present",
+      "current": false,
+      "highlights": [
+        "Prototyping LiFi high-speed optical communication systems",
+        "Leading hardware-software integration for IoT applications"
+      ]
+    }
+  ],
+  "education": {
+    "institution": "National Institute of Technology Durgapur",
+    "degree": "B.Tech in Electronics and Communication Engineering",
+    "period": "2022 - 2026",
+    "cgpa": "8.64"
+  },
+  "projects": [
+    {
+      "title": "PII & PHI Detection Browser Agent",
+      "description": "Browser extension using transformer models for real-time detection of sensitive data. Optimized for edge deployment with ONNX runtime.",
+      "tags": ["DeBERTa-v3", "ONNX", "PyTorch"],
+      "github": "https://github.com/riCl3",
+      "demo": null,
+      "featured": true,
+      "date": "2026-01-15"
+    },
+    {
+      "title": "Noties v2.0",
+      "description": "Local AI meeting assistant with real-time transcription using Whisper. Captures audio via WASAPI loopback for privacy-first note-taking.",
+      "tags": ["Whisper", "WASAPI"],
+      "github": "https://github.com/riCl3",
+      "demo": null,
+      "featured": false,
+      "date": "2025-11-20"
+    },
+    {
+      "title": "Queuebit",
+      "description": "Asynchronous document processing pipeline with job queuing. Built on Redis streams and BullMQ for scalable batch operations.",
+      "tags": ["Redis", "BullMQ"],
+      "github": "https://github.com/riCl3",
+      "demo": null,
+      "featured": false,
+      "date": "2025-08-10"
+    }
+  ],
+  "skills": {
+    "Languages": ["Python", "C++", "Kotlin", "TypeScript", "SQL"],
+    "Frameworks": ["PyTorch", "React", "FastAPI", "Node.js", "LangChain"],
+    "ML/AI": ["Transformers", "ONNX", "vLLM", "Whisper", "DeBERTa"],
+    "Infrastructure": ["Docker", "Redis", "AWS", "Linux", "Proxmox", "Coolify", "LLMOps"],
+    "Tools": ["Git", "VS Code", "Linux CLI"]
+  }
+}
