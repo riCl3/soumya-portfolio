@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { MessageSquare, X } from 'lucide-react'
 import ChatWindow from './ChatWindow'
+import ChatPrompt from './ChatPrompt'
 import { useChat } from './useChat'
 import { loadEmbedder, setProgressCallback } from './ragEngine'
 
@@ -8,6 +9,7 @@ export default function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false)
   const [modelLoaded, setModelLoaded] = useState(false)
   const [modelProgress, setModelProgress] = useState(null)
+  const [showPrompt, setShowPrompt] = useState(true)
   const { messages, loading, error, sendMessage, clearChat } = useChat()
 
   const handleOpen = useCallback(async () => {
@@ -34,8 +36,17 @@ export default function ChatWidget() {
     }
   }, [modelLoaded])
 
+  // Hide prompt when chat opens
+  useEffect(() => {
+    if (isOpen) setShowPrompt(false)
+  }, [isOpen])
+
   return (
     <>
+      {!isOpen && showPrompt && (
+        <ChatPrompt onDismiss={() => setShowPrompt(false)} />
+      )}
+
       {isOpen && (
         <ChatWindow
           messages={messages}

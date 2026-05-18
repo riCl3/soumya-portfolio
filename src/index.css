@@ -127,3 +127,18 @@ body {
 .scrollbar-thin::-webkit-scrollbar {
   width: 4px;
 }
+
+@keyframes chatPrompt {
+  0% {
+    opacity: 0;
+    transform: translateY(12px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-chat-prompt {
+  animation: chatPrompt 0.4s ease-out forwards;
+}
