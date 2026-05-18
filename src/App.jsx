@@ -21,6 +21,7 @@ import ExperienceEditor from './admin/ExperienceEditor'
 import ProjectsEditor from './admin/ProjectsEditor'
 import SkillsEditor from './admin/SkillsEditor'
 import { BlogList as AdminBlogList, BlogEdit } from './admin/BlogEditor'
+import ChatWidget from './chat/ChatWidget'
 
 function AnimatedSection({ children, className = '', delay = 0 }) {
   const [ref, isVisible] = useScrollAnimation(0.1)
@@ -167,6 +168,7 @@ function App() {
             <ScrollToTop />
             <Navbar onSearchOpen={() => setIsSearchOpen(true)} />
             <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
+            <ChatWidget />
 
             <Routes>
               <Route path="/" element={<HomePage />} />
