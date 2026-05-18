@@ -133,7 +133,7 @@ INSERT INTO profiles (id, hero, education) VALUES (
     ]
   }',
   '{
-    "institution": "National Institute of Technology Durgapur",
+    "institution": "Motilal Nehru National Institute of Technology Allahabad (NIT Allahabad)",
     "degree": "B.Tech in Electronics and Communication Engineering",
     "period": "2022 - 2026",
     "cgpa": "8.64"
