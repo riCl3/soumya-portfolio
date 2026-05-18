@@ -15,7 +15,7 @@ export default async function handler(req) {
   try {
     const { messages } = await req.json()
 
-    const apiKey = process.env.GEMINI_API_KEY
+    const apiKey = process.env.GROQ_API_KEY
     if (!apiKey) {
       return new Response(JSON.stringify({ error: 'API key not configured' }), {
         status: 500,
@@ -23,36 +23,25 @@ export default async function handler(req) {
       })
     }
 
-    // Convert OpenAI-style messages to Gemini format
-    const systemInstruction = messages.find(m => m.role === 'system')?.content || ''
-    const conversationMessages = messages.filter(m => m.role !== 'system')
+    const groqRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`
+      },
+      body: JSON.stringify({
+        model: 'llama-3.1-8b-instant',
+        messages,
+        max_tokens: 300,
+        temperature: 0.7
+      })
+    })
 
-    const contents = conversationMessages.map(m => ({
-      role: m.role === 'assistant' ? 'model' : 'user',
-      parts: [{ text: m.content }]
-    }))
+    if (!groqRes.ok) {
+      const errText = await groqRes.text()
+      console.error('Groq API error:', groqRes.status, errText)
 
-    const geminiRes = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          systemInstruction: { parts: [{ text: systemInstruction }] },
-          contents,
-          generationConfig: {
-            maxOutputTokens: 300,
-            temperature: 0.7
-          }
-        })
-      }
-    )
-
-    if (!geminiRes.ok) {
-      const errText = await geminiRes.text()
-      console.error('Gemini API error:', geminiRes.status, errText)
-
-      if (geminiRes.status === 429) {
+      if (groqRes.status === 429) {
         return new Response(JSON.stringify({ error: 'Rate limit exceeded. Please wait a moment.' }), {
           status: 429,
           headers: { ...corsHeaders(), 'Content-Type': 'application/json' }
@@ -65,8 +54,8 @@ export default async function handler(req) {
       })
     }
 
-    const data = await geminiRes.json()
-    const text = data.candidates?.[0]?.content?.parts?.[0]?.text || 'I could not generate a response.'
+    const data = await groqRes.json()
+    const text = data.choices?.[0]?.message?.content || 'I could not generate a response.'
 
     return new Response(JSON.stringify({ text }), {
       status: 200,
