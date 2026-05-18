@@ -11,11 +11,11 @@ const MESSAGES = [
 export default function ChatPrompt({ onDismiss }) {
   const [visible, setVisible] = useState(false)
   const [typedText, setTypedText] = useState('')
-  const [message] = useState(() => MESSAGES[Math.floor(Math.random() * MESSAGES.length)])
   const [cursorVisible, setCursorVisible] = useState(true)
   const [dismissed, setDismissed] = useState(false)
+  const messageRef = useRef(MESSAGES[Math.floor(Math.random() * MESSAGES.length)])
   const typingRef = useRef(null)
-  const dismissTimerRef = useRef(null)
+  const loopRef = useRef(null)
 
   useEffect(() => {
     const showTimer = setTimeout(() => setVisible(true), 3000)
@@ -26,15 +26,33 @@ export default function ChatPrompt({ onDismiss }) {
     if (!visible || dismissed) return
 
     let i = 0
-    typingRef.current = setInterval(() => {
-      if (i < message.length) {
-        setTypedText(message.slice(0, i + 1))
-        i++
-      } else {
-        clearInterval(typingRef.current)
-        dismissTimerRef.current = setTimeout(() => handleDismiss(), 8000)
-      }
-    }, 50)
+    let msg = messageRef.current
+
+    function typeMessage() {
+      i = 0
+      setTypedText('')
+      typingRef.current = setInterval(() => {
+        if (i < msg.length) {
+          setTypedText(msg.slice(0, i + 1))
+          i++
+        } else {
+          clearInterval(typingRef.current)
+          // Wait 5 seconds, then pick a new message and type again
+          loopRef.current = setTimeout(() => {
+            // Pick a different message
+            let next
+            do {
+              next = MESSAGES[Math.floor(Math.random() * MESSAGES.length)]
+            } while (next === msg && MESSAGES.length > 1)
+            msg = next
+            messageRef.current = msg
+            typeMessage()
+          }, 5000)
+        }
+      }, 50)
+    }
+
+    typeMessage()
 
     const cursorInterval = setInterval(() => {
       setCursorVisible(v => !v)
@@ -43,15 +61,15 @@ export default function ChatPrompt({ onDismiss }) {
     return () => {
       clearInterval(typingRef.current)
       clearInterval(cursorInterval)
-      clearTimeout(dismissTimerRef.current)
+      clearTimeout(loopRef.current)
     }
-  }, [visible, message, dismissed])
+  }, [visible, dismissed])
 
   function handleDismiss() {
     setDismissed(true)
     setVisible(false)
     clearInterval(typingRef.current)
-    clearTimeout(dismissTimerRef.current)
+    clearTimeout(loopRef.current)
     onDismiss?.()
   }
 
@@ -60,14 +78,13 @@ export default function ChatPrompt({ onDismiss }) {
   return (
     <div
       className="fixed bottom-24 right-4 sm:right-6 z-50 animate-chat-prompt"
-      onClick={handleDismiss}
     >
-      <div className="relative bg-[#0a0a0a] border border-[#FF5733]/40 rounded-lg px-4 py-3 max-w-[260px] shadow-xl cursor-pointer group">
+      <div className="relative bg-[#0a0a0a] border border-[#FF5733]/40 rounded-lg px-4 py-3 max-w-[260px] shadow-xl group">
         <div className="absolute inset-0 rounded-lg bg-[#FF5733]/5 group-hover:bg-[#FF5733]/10 transition-colors" />
 
         <button
-          onClick={(e) => { e.stopPropagation(); handleDismiss() }}
-          className="absolute -top-2 -right-2 w-5 h-5 bg-[#1a1a1a] border border-[#333] rounded-full flex items-center justify-center text-[#808080] hover:text-[#E5E5E5] transition-colors"
+          onClick={handleDismiss}
+          className="absolute -top-2 -right-2 w-5 h-5 bg-[#1a1a1a] border border-[#333] rounded-full flex items-center justify-center text-[#808080] hover:text-[#E5E5E5] transition-colors z-10"
         >
           <X size={10} />
         </button>
